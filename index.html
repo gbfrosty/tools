@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Whiteout Battle Report OCR - Multi-Role Stats</title>
+  
+  <!-- Pico.css CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  
+  <!-- Tesseract.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  
+  <style>
+    /* Scale down default root typography for compact layout */
+    html {
+      font-size: 16px;
+    }
+
+    body {
+      padding-top: 1rem;
+      padding-bottom: 1.5rem;
+    }
+
+    /* Article containers padding adjustment */
+    article {
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Article headers adjustment */
+    article > header {
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      margin-bottom: 0;
+    }
+
+    /* Single row layout for File Upload & Extract Button */
+    .upload-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .upload-row .file-field {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    .upload-row label {
+      font-size: 0.85rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .upload-row input[type="file"] {
+      margin-bottom: 0;
+      padding: 0.35rem 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    .upload-row button {
+      width: auto;
+      margin-bottom: 0;
+      padding: 0.4rem 1rem;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    /* Compact file selection list */
+    .file-selection-list {
+      max-height: 160px;
+      overflow-y: auto;
+      margin-top: 0.75rem;
+      margin-bottom: 0.5rem;
+      padding: 0.25rem 0.75rem;
+      border: 1px solid var(--pico-muted-border-color);
+      border-radius: var(--pico-border-radius);
+      background: var(--pico-card-background-color);
+    }
+
+    .file-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.25rem 0;
+      border-bottom: 1px solid var(--pico-muted-border-color);
+    }
+
+    .file-row:last-child {
+      border-bottom: none;
+    }
+
+    .file-row span {
+      word-break: break-all;
+      flex: 1 1 auto;
+      font-size: 0.8rem;
+    }
+
+    .file-row select {
+      flex: 0 0 auto;
+      width: auto;
+      margin-bottom: 0;
+      padding: 0.15rem 0.4rem;
+      font-size: 0.8rem;
+      height: auto;
+    }
+
+    /* Dense table styling */
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 0.5rem;
+    }
+
+    table th, table td {
+      white-space: nowrap;
+      font-size: 0.75rem;
+      padding: 0.35rem 0.5rem;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .button-group button {
+      width: auto;
+      margin-bottom: 0;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    textarea {
+      font-size: 0.8rem;
+      padding: 0.5rem;
+    }
+
+    #status {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--pico-primary);
+      margin-top: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="container">
+    <h1 style="text-align: center;">Whiteout Battle Report Reader</h1>
+
+    <!-- 1. File Upload & Config Card -->
+    <article>
+      <header>
+        <h2>1. Upload Battle Reports</h2>
+      </header>
+      
+      <div class="upload-row">
+        <div class="file-field">
+          <label for="image-input">Select Screenshots</label>
+          <input type="file" id="image-input" multiple accept="image/*" onchange="renderFileList()">
+        </div>
+        <button onclick="processScreenshots()">Extract Stats</button>
+      </div>
+
+      <div id="file-list" class="file-selection-list" style="display: none;"></div>
+      <div id="status">Status: Ready</div>
+    </article>
+
+    <!-- 2. Results Table Card -->
+    <article>
+      <header>
+        <h2>2. Parsed Statistics (12 Stats)</h2>
+      </header>
+      
+      <div class="button-group">
+        <button class="contrast" onclick="copyForExcel()">Copy for Excel / Sheets</button>
+        <button class="secondary" onclick="downloadCSV()">Download CSV File</button>
+      </div>
+
+      <div class="table-container">
+        <table class="striped">
+          <thead>
+            <tr>
+              <th>File Name</th>
+              <th>Role</th>
+              <th>Inf Atk</th><th>Inf Def</th><th>Inf Leth</th><th>Inf HP</th>
+              <th>Lan Atk</th><th>Lan Def</th><th>Lan Leth</th><th>Lan HP</th>
+              <th>Mar Atk</th><th>Mar Def</th><th>Mar Leth</th><th>Mar HP</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <tr><td colspan="14" style="text-align:center; color: var(--pico-muted-color);">No report images uploaded yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+  </main>
+
+  <script>
+    let parsedRecords = [];
+
+    function renderFileList() {
+      const fileInput = document.getElementById('image-input');
+      const fileListEl = document.getElementById('file-list');
+      const files = fileInput.files;
+      const statusEl = document.getElementById('status');
+
+      if (files.length === 0) {
+        fileListEl.style.display = 'none';
+        return;
+      }
+
+      fileListEl.innerHTML = '';
+      fileListEl.style.display = 'block';
+
+      Array.from(files).forEach((file, index) => {
+        const row = document.createElement('div');
+        row.className = 'file-row';
+        row.innerHTML = `
+          <span>${file.name}</span>
+          <select id="role-select-${index}">
+            <option value="Attacker" selected>Attacker</option>
+            <option value="Defender">Defender</option>
+            <option value="Both">Both</option>
+          </select>
+        `;
+        fileListEl.appendChild(row);
+      });
+
+      statusEl.innerText = 'Ready for extraction'
+    }
+
+    async function processScreenshots() {
+      const fileInput = document.getElementById('image-input');
+      const statusEl = document.getElementById('status');
+      const files = fileInput.files;
+
+      if (files.length === 0) {
+        alert('Please select one or more battle report images.');
+        return;
+      }
+
+      parsedRecords = [];
+      statusEl.innerText = 'Initializing WebAssembly OCR Engine...';
+
+      const worker = await Tesseract.createWorker('eng');
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const selectedRole = document.getElementById(`role-select-${i}`).value;
+        statusEl.innerText = `Processing report ${i + 1} of ${files.length}: ${file.name}...`;
+
+        try {
+          const result = await worker.recognize(file);
+          const rawText = result.data.text;
+
+          if (selectedRole === 'Attacker' || selectedRole === 'Both') {
+            parsedRecords.push(parseBattleReportText(file.name, 'Attacker', rawText));
+          }
+          if (selectedRole === 'Defender' || selectedRole === 'Both') {
+            parsedRecords.push(parseBattleReportText(file.name, 'Defender', rawText));
+          }
+        } catch (err) {
+          console.error('Failed to read image:', file.name, err);
+        }
+      }
+
+      await worker.terminate();
+      statusEl.innerText = `Successfully processed ${files.length} report(s)!`;
+
+      renderTable();
+    }
+
+    function parseBattleReportText(fileName, role, text) {
+      const getStat = (troop, stat) => {
+        let regex;
+        if (role === 'Attacker') {
+          // Attacker values precede stat label (e.g., "50% Infantry Attack")
+          regex = new RegExp(`(?:\\+?\\s*([\\d\\.]+)\\s*%)[^\\n]*?${troop}\\s*${stat}`, 'i');
+        } else {
+          // Defender values follow stat label (e.g., "Infantry Attack 50%")
+          regex = new RegExp(`${troop}\\s*${stat}[^\\n]*?(?:\\+?\\s*([\\d\\.]+)\\s*%)`, 'i');
+        }
+
+        const match = text.match(regex);
+        return match ? match[1] + '%' : 'N/A';
+      };
+
+      return {
+        fileName: fileName,
+        role: role,
+        // Infantry
+        infAtk: getStat('Infantry', 'Attack'),
+        infDef: getStat('Infantry', 'Defense'),
+        infLeth: getStat('Infantry', 'Lethality'),
+        infHp: getStat('Infantry', 'Health'),
+        // Lancer
+        lanAtk: getStat('Lancer', 'Attack'),
+        lanDef: getStat('Lancer', 'Defense'),
+        lanLeth: getStat('Lancer', 'Lethality'),
+        lanHp: getStat('Lancer', 'Health'),
+        // Marksman
+        marAtk: getStat('Marksman', 'Attack'),
+        marDef: getStat('Marksman', 'Defense'),
+        marLeth: getStat('Marksman', 'Lethality'),
+        marHp: getStat('Marksman', 'Health')
+      };
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('table-body');
+      tbody.innerHTML = '';
+
+      const headers = [
+        "File Name", "Role",
+        "Infantry Atk", "Infantry Def", "Infantry Lethality", "Infantry HP",
+        "Lancer Atk", "Lancer Def", "Lancer Lethality", "Lancer HP",
+        "Marksman Atk", "Marksman Def", "Marksman Lethality", "Marksman HP"
+      ];
+
+      let tsvText = headers.join('\t') + '\n';
+
+      parsedRecords.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${row.fileName}</td>
+          <td>${row.role}</td>
+          <td>${row.infAtk}</td><td>${row.infDef}</td><td>${row.infLeth}</td><td>${row.infHp}</td>
+          <td>${row.lanAtk}</td><td>${row.lanDef}</td><td>${row.lanLeth}</td><td>${row.lanHp}</td>
+          <td>${row.marAtk}</td><td>${row.marDef}</td><td>${row.marLeth}</td><td>${row.marHp}</td>
+        `;
+        tbody.appendChild(tr);
+
+      });
+
+    }
+
+    function copyForExcel() {
+      const text = document.getElementById('raw-output').value;
+      if (!text) return alert('No parsed data available.');
+
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Copied stats to clipboard! Switch to Excel or Google Sheets and press Ctrl+V.');
+      });
+    }
+
+    function downloadCSV() {
+      if (parsedRecords.length === 0) return alert('No parsed data available.');
+
+      let csvContent = "File Name,Role,Infantry Atk,Infantry Def,Infantry Lethality,Infantry HP,Lancer Atk,Lancer Def,Lancer Lethality,Lancer HP,Marksman Atk,Marksman Def,Marksman Lethality,Marksman HP\n";
+      
+      parsedRecords.forEach(row => {
+        csvContent += `"${row.fileName}","${row.role}","${row.infAtk}","${row.infDef}","${row.infLeth}","${row.infHp}","${row.lanAtk}","${row.lanDef}","${row.lanLeth}","${row.lanHp}","${row.marAtk}","${row.marDef}","${row.marLeth}","${row.marHp}"\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `battle_reports_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>
