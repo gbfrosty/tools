@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Whiteout Battle Report OCR - Multi-Role Stats</title>
   
-  <!-- Pico.css CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   
-  <!-- Tesseract.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   
   <style>
@@ -78,7 +76,7 @@
 
     /* Compact file selection list */
     .file-selection-list {
-      max-height: 160px;
+      max-height: 220px;
       overflow-y: auto;
       margin-top: 0.75rem;
       margin-bottom: 0.5rem;
@@ -93,7 +91,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 0.5rem;
-      padding: 0.25rem 0;
+      padding: 0.4rem 0;
       border-bottom: 1px solid var(--pico-muted-border-color);
     }
 
@@ -101,17 +99,18 @@
       border-bottom: none;
     }
 
-    .file-row span {
+    .file-row .file-title {
       word-break: break-all;
       flex: 1 1 auto;
       font-size: 0.8rem;
     }
 
-    .file-row select {
+    .file-row select,
+    .file-row input[type="text"] {
       flex: 0 0 auto;
-      width: auto;
+      width: 130px;
       margin-bottom: 0;
-      padding: 0.15rem 0.4rem;
+      padding: 0.2rem 0.4rem;
       font-size: 0.8rem;
       height: auto;
     }
@@ -143,11 +142,6 @@
       font-size: 0.8rem;
     }
 
-    textarea {
-      font-size: 0.8rem;
-      padding: 0.5rem;
-    }
-
     #status {
       font-size: 0.85rem;
       font-weight: 600;
@@ -161,7 +155,6 @@
   <main class="container">
     <h1 style="text-align: center;">Whiteout Battle Report Reader</h1>
 
-    <!-- 1. File Upload & Config Card -->
     <article>
       <header>
         <h2>1. Upload Battle Reports</h2>
@@ -179,7 +172,6 @@
       <div id="status">Status: Ready</div>
     </article>
 
-    <!-- 2. Results Table Card -->
     <article>
       <header>
         <h2>2. Parsed Statistics (12 Stats)</h2>
@@ -194,7 +186,7 @@
         <table class="striped">
           <thead>
             <tr>
-              <th>File Name</th>
+              <th>Name</th>
               <th>Role</th>
               <th>Inf Atk</th><th>Inf Def</th><th>Inf Leth</th><th>Inf HP</th>
               <th>Lan Atk</th><th>Lan Def</th><th>Lan Leth</th><th>Lan HP</th>
@@ -231,7 +223,9 @@
         const row = document.createElement('div');
         row.className = 'file-row';
         row.innerHTML = `
-          <span>${file.name}</span>
+          <span class="file-title">${file.name}</span>
+          <input type="text" id="attacker-name-${index}" placeholder="Attacker Name">
+          <input type="text" id="defender-name-${index}" placeholder="Defender Name">
           <select id="role-select-${index}">
             <option value="Attacker" selected>Attacker</option>
             <option value="Defender">Defender</option>
@@ -241,7 +235,7 @@
         fileListEl.appendChild(row);
       });
 
-      statusEl.innerText = 'Ready for extraction'
+      statusEl.innerText = 'Ready for extraction';
     }
 
     async function processScreenshots() {
@@ -262,6 +256,12 @@
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const selectedRole = document.getElementById(`role-select-${i}`).value;
+        const attackerNameInput = document.getElementById(`attacker-name-${i}`).value.trim();
+        const defenderNameInput = document.getElementById(`defender-name-${i}`).value.trim();
+
+        const attackerName = attackerNameInput || 'Attacker';
+        const defenderName = defenderNameInput || 'Defender';
+
         statusEl.innerText = `Processing report ${i + 1} of ${files.length}: ${file.name}...`;
 
         try {
@@ -269,10 +269,10 @@
           const rawText = result.data.text;
 
           if (selectedRole === 'Attacker' || selectedRole === 'Both') {
-            parsedRecords.push(parseBattleReportText(file.name, 'Attacker', rawText));
+            parsedRecords.push(parseBattleReportText(attackerName, 'Attacker', rawText));
           }
           if (selectedRole === 'Defender' || selectedRole === 'Both') {
-            parsedRecords.push(parseBattleReportText(file.name, 'Defender', rawText));
+            parsedRecords.push(parseBattleReportText(defenderName, 'Defender', rawText));
           }
         } catch (err) {
           console.error('Failed to read image:', file.name, err);
@@ -285,7 +285,7 @@
       renderTable();
     }
 
-    function parseBattleReportText(fileName, role, text) {
+    function parseBattleReportText(name, role, text) {
       const getStat = (troop, stat) => {
         let regex;
         if (role === 'Attacker') {
@@ -293,7 +293,7 @@
           regex = new RegExp(`(?:\\+?\\s*([\\d\\.]+)\\s*%)[^\\n]*?${troop}\\s*${stat}`, 'i');
         } else {
           // Defender values follow stat label (e.g., "Infantry Attack 50%")
-          regex = new RegExp(`${troop}\\s*${stat}[^\\n]*?(?:\\+?\\s*([\\d\\.]+)\\s*%)`, 'i');
+          regex = new RegExp(`${troop}\\s*${stat}[^\\n]*?(?:\\+?\\s*([\\d\\.]+)\\s*)`, 'i');
         }
 
         const match = text.match(regex);
@@ -301,7 +301,7 @@
       };
 
       return {
-        fileName: fileName,
+        name: name,
         role: role,
         // Infantry
         infAtk: getStat('Infantry', 'Attack'),
@@ -325,35 +325,45 @@
       const tbody = document.getElementById('table-body');
       tbody.innerHTML = '';
 
-      const headers = [
-        "File Name", "Role",
-        "Infantry Atk", "Infantry Def", "Infantry Lethality", "Infantry HP",
-        "Lancer Atk", "Lancer Def", "Lancer Lethality", "Lancer HP",
-        "Marksman Atk", "Marksman Def", "Marksman Lethality", "Marksman HP"
-      ];
-
-      let tsvText = headers.join('\t') + '\n';
+      if (parsedRecords.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="14" style="text-align:center; color: var(--pico-muted-color);">No report images uploaded yet.</td></tr>';
+        return;
+      }
 
       parsedRecords.forEach(row => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>${row.fileName}</td>
+          <td>${row.name}</td>
           <td>${row.role}</td>
           <td>${row.infAtk}</td><td>${row.infDef}</td><td>${row.infLeth}</td><td>${row.infHp}</td>
           <td>${row.lanAtk}</td><td>${row.lanDef}</td><td>${row.lanLeth}</td><td>${row.lanHp}</td>
           <td>${row.marAtk}</td><td>${row.marDef}</td><td>${row.marLeth}</td><td>${row.marHp}</td>
         `;
         tbody.appendChild(tr);
-
       });
-
     }
 
     function copyForExcel() {
-      const text = document.getElementById('raw-output').value;
-      if (!text) return alert('No parsed data available.');
+      if (parsedRecords.length === 0) return alert('No parsed data available.');
 
-      navigator.clipboard.writeText(text).then(() => {
+      const headers = [
+        "Name", "Role",
+        "Infantry Atk", "Infantry Def", "Infantry Lethality", "Infantry HP",
+        "Lancer Atk", "Lancer Def", "Lancer Lethality", "Lancer HP",
+        "Marksman Atk", "Marksman Def", "Marksman Lethality", "Marksman HP"
+      ];
+
+      let tsvText = headers.join('\t') + '\n';
+      parsedRecords.forEach(row => {
+        tsvText += [
+          row.name, row.role,
+          row.infAtk, row.infDef, row.infLeth, row.infHp,
+          row.lanAtk, row.lanDef, row.lanLeth, row.lanHp,
+          row.marAtk, row.marDef, row.marLeth, row.marHp
+        ].join('\t') + '\n';
+      });
+
+      navigator.clipboard.writeText(tsvText).then(() => {
         alert('Copied stats to clipboard! Switch to Excel or Google Sheets and press Ctrl+V.');
       });
     }
@@ -361,10 +371,10 @@
     function downloadCSV() {
       if (parsedRecords.length === 0) return alert('No parsed data available.');
 
-      let csvContent = "File Name,Role,Infantry Atk,Infantry Def,Infantry Lethality,Infantry HP,Lancer Atk,Lancer Def,Lancer Lethality,Lancer HP,Marksman Atk,Marksman Def,Marksman Lethality,Marksman HP\n";
+      let csvContent = "Name,Role,Infantry Atk,Infantry Def,Infantry Lethality,Infantry HP,Lancer Atk,Lancer Def,Lancer Lethality,Lancer HP,Marksman Atk,Marksman Def,Marksman Lethality,Marksman HP\n";
       
       parsedRecords.forEach(row => {
-        csvContent += `"${row.fileName}","${row.role}","${row.infAtk}","${row.infDef}","${row.infLeth}","${row.infHp}","${row.lanAtk}","${row.lanDef}","${row.lanLeth}","${row.lanHp}","${row.marAtk}","${row.marDef}","${row.marLeth}","${row.marHp}"\n`;
+        csvContent += `"${row.name}","${row.role}","${row.infAtk}","${row.infDef}","${row.infLeth}","${row.infHp}","${row.lanAtk}","${row.lanDef}","${row.lanLeth}","${row.lanHp}","${row.marAtk}","${row.marDef}","${row.marLeth}","${row.marHp}"\n`;
       });
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
