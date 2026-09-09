@@ -188,6 +188,7 @@
             <tr>
               <th>Name</th>
               <th>Role</th>
+              <th>Formation</th>
               <th>Inf Atk</th><th>Inf Def</th><th>Inf Leth</th><th>Inf HP</th>
               <th>Lan Atk</th><th>Lan Def</th><th>Lan Leth</th><th>Lan HP</th>
               <th>Mar Atk</th><th>Mar Def</th><th>Mar Leth</th><th>Mar HP</th>
@@ -286,6 +287,42 @@
     }
 
     function parseBattleReportText(name, role, text) {
+      //console.log(text)
+      const getFormation = () => {
+        // Creating the regex literal inside the helper guarantees lastIndex starts fresh at 0
+        const regex = /(?<!\+)\b(\d+)\.(\d{2})\d*(?:%|7)/g;
+        
+        const parsedNumbers = [];
+        let match;
+
+        while ((match = regex.exec(text)) !== null) {
+          const truncatedValue = `${match[1]}.${match[2]}`;
+          parsedNumbers.push(parseFloat(truncatedValue));
+        }
+
+        const formations = [];
+        let currentGroup = [];
+        let currentSum = 0;
+
+        for (const num of parsedNumbers) {
+          currentGroup.push(`${num}%`);
+          currentSum += num;
+
+          // Check if the running sum reaches approximately 100%
+          if (currentSum >= 98 && currentSum <= 102) {
+            formations.push(currentGroup.join(' '));
+            currentGroup = [];
+            currentSum = 0;
+          }
+        }
+
+        if (currentGroup.length > 0) {
+          formations.push(currentGroup.join(' '));
+        }
+
+        return role === 'Attacker' ? (formations[0] || 'N/A') : (formations[1] || 'N/A');
+      };
+
       const getStat = (troop, stat) => {
         let regex;
         if (role === 'Attacker') {
@@ -303,6 +340,7 @@
       return {
         name: name,
         role: role,
+        formation: getFormation(),
         // Infantry
         infAtk: getStat('Infantry', 'Attack'),
         infDef: getStat('Infantry', 'Defense'),
@@ -335,6 +373,7 @@
         tr.innerHTML = `
           <td>${row.name}</td>
           <td>${row.role}</td>
+          <td>${row.formation}</td>
           <td>${row.infAtk}</td><td>${row.infDef}</td><td>${row.infLeth}</td><td>${row.infHp}</td>
           <td>${row.lanAtk}</td><td>${row.lanDef}</td><td>${row.lanLeth}</td><td>${row.lanHp}</td>
           <td>${row.marAtk}</td><td>${row.marDef}</td><td>${row.marLeth}</td><td>${row.marHp}</td>
@@ -347,7 +386,7 @@
       if (parsedRecords.length === 0) return alert('No parsed data available.');
 
       const headers = [
-        "Name", "Role",
+        "Name", "Role", "Formation",
         "Infantry Atk", "Infantry Def", "Infantry Lethality", "Infantry HP",
         "Lancer Atk", "Lancer Def", "Lancer Lethality", "Lancer HP",
         "Marksman Atk", "Marksman Def", "Marksman Lethality", "Marksman HP"
@@ -356,7 +395,7 @@
       let tsvText = headers.join('\t') + '\n';
       parsedRecords.forEach(row => {
         tsvText += [
-          row.name, row.role,
+          row.name, row.role, row.formation,
           row.infAtk, row.infDef, row.infLeth, row.infHp,
           row.lanAtk, row.lanDef, row.lanLeth, row.lanHp,
           row.marAtk, row.marDef, row.marLeth, row.marHp
@@ -371,10 +410,10 @@
     function downloadCSV() {
       if (parsedRecords.length === 0) return alert('No parsed data available.');
 
-      let csvContent = "Name,Role,Infantry Atk,Infantry Def,Infantry Lethality,Infantry HP,Lancer Atk,Lancer Def,Lancer Lethality,Lancer HP,Marksman Atk,Marksman Def,Marksman Lethality,Marksman HP\n";
+      let csvContent = "Name,Role,Formation,Infantry Atk,Infantry Def,Infantry Lethality,Infantry HP,Lancer Atk,Lancer Def,Lancer Lethality,Lancer HP,Marksman Atk,Marksman Def,Marksman Lethality,Marksman HP\n";
       
       parsedRecords.forEach(row => {
-        csvContent += `"${row.name}","${row.role}","${row.infAtk}","${row.infDef}","${row.infLeth}","${row.infHp}","${row.lanAtk}","${row.lanDef}","${row.lanLeth}","${row.lanHp}","${row.marAtk}","${row.marDef}","${row.marLeth}","${row.marHp}"\n`;
+        csvContent += `"${row.name}","${row.role}","${row.formation}","${row.infAtk}","${row.infDef}","${row.infLeth}","${row.infHp}","${row.lanAtk}","${row.lanDef}","${row.lanLeth}","${row.lanHp}","${row.marAtk}","${row.marDef}","${row.marLeth}","${row.marHp}"\n`;
       });
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
