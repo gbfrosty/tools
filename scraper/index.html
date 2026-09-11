@@ -148,6 +148,36 @@
       color: var(--pico-primary);
       margin-top: 0.25rem;
     }
+
+    /* Responsive adjustments for file selection list on smaller screens */
+    @media (max-width: 600px) {
+      .file-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+        padding: 0.75rem 0;
+      }
+
+      .file-row .file-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        width: 100%;
+      }
+
+      /* Expand inputs to fill available space evenly in mobile view */
+      .file-row select,
+      .file-row input[type="text"] {
+        flex: 1 1 calc(50% - 0.25rem); /* Two items per row on mobile */
+        min-width: 110px;
+        width: 100%;
+      }
+
+      /* Make the select dropdown span full width if placed on its own row */
+      .file-row select {
+        flex: 1 1 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -187,7 +217,6 @@
           <thead>
             <tr>
               <th>Name</th>
-              <th>Role</th>
               <th>Formation</th>
               <th>Inf Atk</th><th>Inf Def</th><th>Inf Leth</th><th>Inf HP</th>
               <th>Lan Atk</th><th>Lan Def</th><th>Lan Leth</th><th>Lan HP</th>
@@ -225,13 +254,15 @@
         row.className = 'file-row';
         row.innerHTML = `
           <span class="file-title">${file.name}</span>
-          <input type="text" id="attacker-name-${index}" placeholder="Attacker Name">
-          <input type="text" id="defender-name-${index}" placeholder="Defender Name">
-          <select id="role-select-${index}">
-            <option value="Attacker" selected>Attacker</option>
-            <option value="Defender">Defender</option>
-            <option value="Both">Both</option>
-          </select>
+          <div class="file-controls">
+            <input type="text" id="player1-name-${index}" placeholder="Player 1 Name">
+            <input type="text" id="player2-name-${index}" placeholder="Player 2 Name">
+            <select id="player-select-${index}">
+              <option value="Player 1" selected>Player 1</option>
+              <option value="Player 2">Player 2</option>
+              <option value="Both">Both</option>
+            </select>
+          </div>
         `;
         fileListEl.appendChild(row);
       });
@@ -333,12 +364,12 @@
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const selectedRole = document.getElementById(`role-select-${i}`).value;
-        const attackerNameInput = document.getElementById(`attacker-name-${i}`).value.trim();
-        const defenderNameInput = document.getElementById(`defender-name-${i}`).value.trim();
+        const selectedPlayer = document.getElementById(`player-select-${i}`).value;
+        const player1NameInput = document.getElementById(`player1-name-${i}`).value.trim();
+        const player2NameInput = document.getElementById(`player2-name-${i}`).value.trim();
 
-        const attackerName = attackerNameInput || 'Attacker';
-        const defenderName = defenderNameInput || 'Defender';
+        const player1Name = player1NameInput || 'Player 1';
+        const player2Name = player2NameInput || 'Player 2';
 
         statusEl.innerText = `Processing report ${i + 1} of ${files.length}: ${file.name}...`;
 
@@ -353,11 +384,11 @@
           const result = await worker.recognize(image);
           const rawText = result.data.text;
 
-          if (selectedRole === 'Attacker' || selectedRole === 'Both') {
-            parsedRecords.push(parseBattleReportText(attackerName, 'Attacker', rawText));
+          if (selectedPlayer === 'Player 1' || selectedPlayer === 'Both') {
+            parsedRecords.push(parseBattleReportText(player1Name, 'Player 1', rawText));
           }
-          if (selectedRole === 'Defender' || selectedRole === 'Both') {
-            parsedRecords.push(parseBattleReportText(defenderName, 'Defender', rawText));
+          if (selectedPlayer === 'Player 2' || selectedPlayer === 'Both') {
+            parsedRecords.push(parseBattleReportText(player2Name, 'Player 2', rawText));
           }
         } catch (err) {
           console.error('Failed to read image:', file.name, err);
@@ -404,16 +435,16 @@
           formations.push(currentGroup.join(' '));
         }
 
-        return role === 'Attacker' ? (formations[0] || 'N/A') : (formations[1] || 'N/A');
+        return role === 'Player 1' ? (formations[0] || 'N/A') : (formations[1] || 'N/A');
       };
 
       const getStat = (troop, stat) => {
         let regex;
-        if (role === 'Attacker') {
-          // Attacker values precede stat label (e.g., "50% Infantry Attack")
+        if (role === 'Player 1') {
+          // Player 1 values precede stat label (e.g., "50% Infantry Attack")
           regex = new RegExp(`(?:\\+?\\s*([\\d\\.]+)\\s*%)[^\\n]*?${troop}\\s*${stat}`, 'i');
         } else {
-          // Defender values follow stat label (e.g., "Infantry Attack 50%")
+          // Player 2 values follow stat label (e.g., "Infantry Attack 50%")
           regex = new RegExp(`${troop}\\s*${stat}[^\\n]*?(?:\\+?\\s*([\\d\\.]+)\\s*)`, 'i');
         }
 
@@ -456,7 +487,6 @@
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>${row.name}</td>
-          <td>${row.role}</td>
           <td>${row.formation}</td>
           <td>${row.infAtk}</td><td>${row.infDef}</td><td>${row.infLeth}</td><td>${row.infHp}</td>
           <td>${row.lanAtk}</td><td>${row.lanDef}</td><td>${row.lanLeth}</td><td>${row.lanHp}</td>
@@ -470,7 +500,7 @@
       if (parsedRecords.length === 0) return alert('No parsed data available.');
 
       const headers = [
-        "Name", "Role", "Formation",
+        "Name", "Formation",
         "Infantry Atk", "Infantry Def", "Infantry Lethality", "Infantry HP",
         "Lancer Atk", "Lancer Def", "Lancer Lethality", "Lancer HP",
         "Marksman Atk", "Marksman Def", "Marksman Lethality", "Marksman HP"
@@ -479,7 +509,7 @@
       let tsvText = headers.join('\t') + '\n';
       parsedRecords.forEach(row => {
         tsvText += [
-          row.name, row.role, row.formation,
+          row.name, row.formation,
           row.infAtk, row.infDef, row.infLeth, row.infHp,
           row.lanAtk, row.lanDef, row.lanLeth, row.lanHp,
           row.marAtk, row.marDef, row.marLeth, row.marHp
@@ -494,10 +524,10 @@
     function downloadCSV() {
       if (parsedRecords.length === 0) return alert('No parsed data available.');
 
-      let csvContent = "Name,Role,Formation,Infantry Atk,Infantry Def,Infantry Lethality,Infantry HP,Lancer Atk,Lancer Def,Lancer Lethality,Lancer HP,Marksman Atk,Marksman Def,Marksman Lethality,Marksman HP\n";
+      let csvContent = "Name,Formation,Infantry Atk,Infantry Def,Infantry Lethality,Infantry HP,Lancer Atk,Lancer Def,Lancer Lethality,Lancer HP,Marksman Atk,Marksman Def,Marksman Lethality,Marksman HP\n";
       
       parsedRecords.forEach(row => {
-        csvContent += `"${row.name}","${row.role}","${row.formation}","${row.infAtk}","${row.infDef}","${row.infLeth}","${row.infHp}","${row.lanAtk}","${row.lanDef}","${row.lanLeth}","${row.lanHp}","${row.marAtk}","${row.marDef}","${row.marLeth}","${row.marHp}"\n`;
+        csvContent += `"${row.name}",${row.formation}","${row.infAtk}","${row.infDef}","${row.infLeth}","${row.infHp}","${row.lanAtk}","${row.lanDef}","${row.lanLeth}","${row.lanHp}","${row.marAtk}","${row.marDef}","${row.marLeth}","${row.marHp}"\n`;
       });
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
