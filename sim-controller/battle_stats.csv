@@ -1,0 +1,61 @@
+Date,Player,Side,Troop_Type,Hero,Stars,Widget,Camp,Tier,March_Size,Formation,Troops,Atk,Def,Leth,Hp,Win %,URL,,Hero,Atk / Def,,Gen,Widget Leth / Hp
+15/10/26,AlphaAtk,Attacker,Infantry,Hector,5,3,FC8,T10,180000,55,99000,1170.6,1074.3,816.1,947.9,,,,WuMing 5*,540.43,,Gen 11,32
+15/10/26,AlphaAtk,Attacker,Lancer,Mia,5,4,FC8,T10,180000,15,27000,875.8,792.6,782.8,652,,,,WuMing 4*,375.3,,Gen 10,27.75
+15/10/26,AlphaAtk,Attacker,Marksman,Gwen,5,4,FC8,T11,180000,30,54000,1188.1,1027.7,1004.1,820.5,,,,Hector 5*,444.35,,Gen 9,23.2
+15/10/26,AlphaDef,Attacker,Infantry,Hector,5,3,FC8,T11,180000,50,90000,1170.6,1074.3,816.1,947.9,,,,Jero 5*,260.2,,Gen 8,19.3
+15/10/26,AlphaDef,Attacker,Lancer,Molly,5,2,FC8,T10,180000,20,36000,755.5,745.3,727.1,561.6,,,,Jero 4*,180.4,,Gen 7,16.05
+15/10/26,AlphaDef,Attacker,Marksman,Gwen,5,4,FC8,T10,180000,30,54000,1188.1,1027.7,1004.1,820.5,,,,Flint 5*,240.19,,Gen 6,13.35
+15/10/26,FrostyBest,Attacker,Infantry,Hector,5,2,FC8,T11,176050,48,84504,1141.6,1160.4,755.2,921.6,,,,Renee 5*,540.43,,Gen 5,11.1
+15/10/26,FrostyBest,Attacker,Lancer,Mia,5,5,FC8,T10,176050,4,7042,919.5,921.8,575.8,516.8,,,,Renee 4*,374.67,,Gen 4,9.25
+15/10/26,FrostyBest,Attacker,Marksman,Gwen,5,3,FC8,T10,176050,48,84504,1108.3,1110.5,909.3,679.9,,,,Mia 5*,290.23,,Gen 3,7
+15/10/26,Frosty2nd,Attacker,Infantry,Jeronimo,4,5,FC8,T11,176050,48,84504,857.7,846.4,618.7,649.1,,,,Mia 4*,201.21,,Gen 2,6
+15/10/26,Frosty2nd,Attacker,Lancer,Norah,4,1,FC8,T10,176050,4,7042,1037.5,1039.8,799.1,578.4,,,,Norah 5*,444.35,,Gen 1,5
+15/10/26,Frosty2nd,Attacker,Marksman,Lynn,5,1,FC8,T10,176050,48,84504,1014.2,1016.5,609.2,513.4,,,,Norah 4*,308.06,,,
+15/10/26,JaxsonRenee,Attacker,Infantry,WuMing,5,5,FC8,T11,190000,40,76000,1655.3,1189.5,1285.9,1099.4,,,,Reina 5*,370.29,,,
+15/10/26,JaxsonRenee,Attacker,Lancer,Renee,5,5,FC8,T10,190000,20,38000,1625.6,1168.9,1188.4,744,,,,Wayne 5*,540.43,,,
+15/10/26,JaxsonRenee,Attacker,Marksman,Wayne,5,5,FC8,T11,190000,40,76000,1755.1,1264.8,1684,934.4,,,,Gwen 5*,444.35,,,
+15/10/26,Bora,Attacker,Infantry,WuMing,5,5,FC8,T11,200000,40,80000,1719.7,1628.1,1385.7,1452.7,,,,Lynn 5*,370.29,,,
+15/10/26,Bora,Attacker,Lancer,Renee,5,5,FC8,T10,200000,20,40000,1329.4,1256.3,846.6,894,,,,,,,,
+15/10/26,Bora,Attacker,Marksman,Wayne,5,5,FC8,T11,200000,40,80000,1828.3,1727.5,1407.6,1485,,,,,,,,
+15/10/26,Bora,Attacker,Infantry,WuMing,5,5,FC8,T11,180000,48,86400,1719.7,1628.1,1385.7,1452.7,,,,,,,,
+15/10/26,Bora,Attacker,Lancer,Renee,5,5,FC8,T10,180000,4,7200,1329.4,1256.3,846.6,894,,,,,,,,
+15/10/26,Bora,Attacker,Marksman,Wayne,5,5,FC8,T11,180000,48,86400,1828.3,1727.5,1407.6,1485,,,,,,,,
+15/10/26,JaxsonMia,Attacker,Infantry,WuMing,5,5,FC8,T11,190000,48,91200,1655.3,1189.5,1285.9,1099.4,,,,,,,,
+15/10/26,JaxsonMia,Attacker,Lancer,Renee,5,5,FC8,T10,190000,4,7600,1079.2,1006.1,1188.4,744,,https://wos-sim.ratme.org/simualate-wosui?mode=battle&run=09e05032-c5ec-4b8b-b1dc-3df89d0196d7,,,,,,
+15/10/26,JaxsonMia,Attacker,Marksman,Wayne,5,5,FC8,T11,190000,48,91200,1755.1,1264.8,1684,934.4,,,,,,,,
+15/10/26,AusieRenee,Attacker,Infantry,WuMing,5,5,FC8,T11,190000,40,76000,1545.90909090909,1374.45454545455,1383.3,1344.8,,,,,,,,
+15/10/26,AusieRenee,Attacker,Lancer,Renee,5,5,FC8,T10,190000,20,38000,1526.36363636364,1338.45454545455,937,806.4,2.00%,https://wos-sim.ratme.org/simualate-wosui?mode=battle&run=40e5352f-f8cf-444b-a1f3-297c446efd0d,,,,,,
+15/10/26,AusieRenee,Attacker,Marksman,Wayne,5,5,FC8,T11,190000,40,76000,1620.54545454545,1465.90909090909,1571,1107.8,,,,,,,,
+15/10/26,AusieRenee,Attacker,Infantry,WuMing,5,5,FC8,T11,190000,50,95000,1545.90909090909,1374.45454545455,1383.3,1344.8,,,,,,,,
+15/10/26,AusieRenee,Attacker,Lancer,Renee,5,5,FC8,T10,190000,20,38000,1526.36363636364,1338.45454545455,937,806.4,4.50%,,,,,,,
+15/10/26,AusieRenee,Attacker,Marksman,Wayne,5,5,FC8,T11,190000,30,57000,1620.54545454545,1465.90909090909,1571,1107.8,,,,,,,,
+15/10/26,AusieMia,Attacker,Infantry,WuMing,5,5,FC8,T11,190000,48,91200,1545.90909090909,1374.45454545455,1383.3,1344.8,,,,,,,,
+15/10/26,AusieMia,Attacker,Lancer,Mia,5,5,FC8,T10,190000,4,7600,1186.36363636364,998.454545454545,937,806.4,87.90%,https://wos-sim.ratme.org/simualate-wosui?mode=battle&run=ba7e252d-448d-4cb5-9471-47cdea80bb05,,,,,,
+15/10/26,AusieMia,Attacker,Marksman,Wayne,5,5,FC8,T11,190000,48,91200,1620.54545454545,1465.90909090909,1571,1107.8,,,,,,,,
+15/10/26,AusieMia,Attacker,Infantry,WuMing,5,5,FC8,T11,190000,60,114000,1545.90909090909,1374.45454545455,1383.3,1344.8,,,,,,,,
+15/10/26,AusieMia,Attacker,Lancer,Mia,5,5,FC8,T10,190000,0,0,1186.36363636364,998.454545454545,937,806.4,97.20%,https://wos-sim.ratme.org/simualate-wosui?mode=battle&run=7a31ff14-2ad8-4c98-aa6c-62a852312935,,,,,,
+15/10/26,AusieMia,Attacker,Marksman,Wayne,5,5,FC8,T11,190000,40,76000,1620.54545454545,1465.90909090909,1571,1107.8,,,,,,,,
+15/10/26,AusieNorah,Attacker,Infantry,WuMing,5,5,FC8,T11,190000,55,104500,1545.90909090909,1374.45454545455,1383.3,1344.8,,,,,,,,
+15/10/26,AusieNorah,Attacker,Lancer,Norah,5,5,FC8,T10,190000,5,9500,1341.36363636364,1153.45454545455,937,806.4,48.20%,https://wos-sim.ratme.org/simualate-wosui?mode=battle&run=b9f056c3-68b0-46e8-a41a-b8fc1bfdc05b,,,,,,
+15/10/26,AusieNorah,Attacker,Marksman,Wayne,5,5,FC8,T11,190000,40,76000,1620.54545454545,1465.90909090909,1571,1107.8,,,,,,,,
+15/10/26,AusieNorah,Attacker,Infantry,Hector,5,5,FC8,T11,190000,48,91200,1445.90909090909,1274.45454545455,1383.3,1344.8,,,,,,,,
+15/10/26,AusieNorah,Attacker,Lancer,Norah,5,5,FC8,T10,190000,4,7600,1001.36363636364,813.454545454545,937,806.4,36.10%,https://wos-sim.ratme.org/simualate-wosui?mode=battle&run=40ce1f25-66b4-4c20-86e5-7866b24ad2ec,,,,,,
+15/10/26,AusieNorah,Attacker,Marksman,Wayne,5,5,FC8,T11,190000,48,91200,1620.54545454545,1465.90909090909,1571,1107.8,,,,,,,,
+15/10/26,AusieNorah,Attacker,Infantry,Hector,5,5,FC8,T11,190000,50,95000,1445.90909090909,1274.45454545455,1383.3,1344.8,,,,,,,,
+15/10/26,AusieNorah,Attacker,Lancer,Norah,5,5,FC8,T10,190000,20,38000,1001.36363636364,813.454545454545,937,806.4,58.00%,https://wos-sim.ratme.org/simualate-wosui?mode=battle&run=b9f056c3-68b0-46e8-a41a-b8fc1bfdc05b,,,,,,
+15/10/26,AusieNorah,Attacker,Marksman,Wayne,5,5,FC8,T11,190000,30,57000,1620.54545454545,1465.90909090909,1571,1107.8,,,,,,,,
+15/10/26,AusieNorah,Attacker,Infantry,Hector,5,5,FC8,T11,190000,45,85500,1445.90909090909,1274.45454545455,1383.3,1344.8,,,,,,,,
+15/10/26,AusieNorah,Attacker,Lancer,Norah,5,5,FC8,T10,190000,20,38000,1001.36363636364,813.454545454545,937,806.4,63.00%,https://wos-sim.ratme.org/simualate-wosui?mode=battle&run=c3ffd100-f37e-4862-9380-d12459c359ed,,,,,,
+15/10/26,AusieNorah,Attacker,Marksman,Wayne,5,5,FC8,T11,190000,35,66500,1620.54545454545,1465.90909090909,1571,1107.8,,,,,,,,
+15/10/26,AusieNorah,Attacker,Infantry,Hector,5,5,FC8,T11,190000,40,76000,1445.90909090909,1274.45454545455,1383.3,1344.8,,,,,,,,
+15/10/26,AusieNorah,Attacker,Lancer,Norah,5,5,FC8,T10,190000,20,38000,1001.36363636364,813.454545454545,937,806.4,60.70%,https://wos-sim.ratme.org/simualate-wosui?mode=battle&run=80e8983c-70b4-42ef-b5e7-81f80f8bf0a7,,,,,,
+15/10/26,AusieNorah,Attacker,Marksman,Wayne,5,5,FC8,T11,190000,40,76000,1620.54545454545,1465.90909090909,1571,1107.8,,,,,,,,
+15/10/26,AusieNorah,Attacker,Infantry,Hector,5,5,FC8,T11,190000,50,95000,1445.90909090909,1274.45454545455,1383.3,1344.8,,,,,,,,
+15/10/26,AusieNorah,Attacker,Lancer,Norah,5,5,FC8,T10,190000,10,19000,1001.36363636364,813.454545454545,937,806.4,65.90%,https://wos-sim.ratme.org/simualate-wosui?mode=battle&run=c385c1f4-fc82-4f54-b189-6c91421f16ae,,,,,,
+15/10/26,AusieNorah,Attacker,Marksman,Wayne,5,5,FC8,T11,190000,40,76000,1620.54545454545,1465.90909090909,1571,1107.8,,,,,,,,
+15/10/26,AusieNorah,Attacker,Infantry,Hector,5,5,FC8,T11,190000,45,85500,1445.90909090909,1274.45454545455,1383.3,1344.8,,,,,,,,
+15/10/26,AusieNorah,Attacker,Lancer,Norah,5,5,FC8,T10,190000,20,38000,1001.36363636364,813.454545454545,937,806.4,27.80%,https://wos-sim.ratme.org/simualate-wosui?mode=battle&run=80293b9b-e0cd-48cb-86e8-e181a569be08,,,,,,
+15/10/26,AusieNorah,Attacker,Marksman,Lynn,5,5,FC8,T11,190000,35,66500,1450.54545454545,1295.90909090909,1571,1107.8,,,,,,,,
+15/10/26,AusieNorah,Attacker,Infantry,Hector,5,5,FC8,T11,190000,50,95000,1445.90909090909,1274.45454545455,1383.3,1344.8,,,,,,,,
+15/10/26,AusieNorah,Attacker,Lancer,Norah,5,5,FC8,T10,190000,20,38000,1001.36363636364,813.454545454545,937,806.4,24.40%,https://wos-sim.ratme.org/simualate-wosui?mode=battle&run=80293b9b-e0cd-48cb-86e8-e181a569be08,,,,,,
+15/10/26,AusieNorah,Attacker,Marksman,Lynn,5,5,FC8,T11,190000,30,57000,1280.54545454545,1125.90909090909,1571,1107.8,,,,,,,,

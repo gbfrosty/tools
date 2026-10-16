@@ -1,0 +1,66 @@
+{
+    "attacker": {
+        "infantry": {
+            "tier": "attacker.troops.infantry.tier",
+            "count": "attacker.troops.infantry.count",
+            "stats": {
+                "atk": "attacker.stats.infantry.attack",
+                "def": "attacker.stats.infantry.defense",
+                "leth": "attacker.stats.infantry.lethality",
+                "hp": "attacker.stats.infantry.health"
+            }
+        },
+        "lancer": {
+            "tier": "attacker.troops.lancer.tier",
+            "count": "attacker.troops.lancer.count",
+            "stats": {
+                "atk": "attacker.stats.lancer.attack",
+                "def": "attacker.stats.lancer.defense",
+                "leth": "attacker.stats.lancer.lethality",
+                "hp": "attacker.stats.lancer.health"
+            }
+        },
+        "marksman": {
+            "tier": "attacker.troops.marksman.tier",
+            "count": "attacker.troops.marksman.count",
+            "stats": {
+                "atk": "attacker.stats.marksman.attack",
+                "def": "attacker.stats.marksman.defense",
+                "leth": "attacker.stats.marksman.lethality",
+                "hp": "attacker.stats.marksman.health"
+            }
+        }
+    },
+    "defender": {
+        "infantry": {
+            "tier": "defender.troops.infantry.tier",
+            "count": "defender.troops.infantry.count",
+            "stats": {
+                "atk": "defender.stats.infantry.attack",
+                "def": "defender.stats.infantry.defense",
+                "leth": "defender.stats.infantry.lethality",
+                "hp": "defender.stats.infantry.health"
+            }
+        },
+        "lancer": {
+            "tier": "defender.troops.lancer.tier",
+            "count": "defender.troops.lancer.count",
+            "stats": {
+                "atk": "defender.stats.lancer.attack",
+                "def": "defender.stats.lancer.defense",
+                "leth": "defender.stats.lancer.lethality",
+                "hp": "defender.stats.lancer.health"
+            }
+        },
+        "marksman": {
+            "tier": "defender.troops.marksman.tier",
+            "count": "defender.troops.marksman.count",
+            "stats": {
+                "atk": "defender.stats.marksman.attack",
+                "def": "defender.stats.marksman.defense",
+                "leth": "defender.stats.marksman.lethality",
+                "hp": "defender.stats.marksman.health"
+            }
+        }
+    }
+}
